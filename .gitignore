@@ -1,0 +1,13 @@
+# synced skill copies (python -m uprkit skills sync) are git-ignored by their own .gitignore
+__pycache__/
+*.pyc
+.pytest_cache/
+# a workspace never belongs in this repository
+ps2rc-workspace.json
+/work/
+/PS2RC/
+/packs/
+*.iso
+*.ISO
+*.cso
+local.toml

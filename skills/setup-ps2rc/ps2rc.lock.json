@@ -1,0 +1,40 @@
+{
+  "format": 1,
+  "about": "PS2RC releases this kit was checked against. setup_ps2rc.py installs only these unless --allow-unpinned is given. tree_sha256 = SHA-256 of the lines '<sha256 of the file>  <path>' (sorted by path) of every file in the release's source archive.",
+  "repo": "SandstoneDev/PS2RC",
+  "url": "https://github.com/SandstoneDev/PS2RC",
+  "default": "v0.1.1",
+  "reserved": [
+    {"serial": "SLES-52541", "version": "2.01", "pack": "games/SLES-52541_v2.01", "notice": "games/SLES-52541_v2.01/RESERVED.md"}
+  ],
+  "releases": {
+    "v0.1.1": {
+      "commit": "332a437f21f7ef694943caef885a7d28410cbc41",
+      "tree_sha256": "8478a94e030c8b09982a66395c8c8ffd6b0fa08aa76b29b2c49f10aeed255c16",
+      "files": 403,
+      "pack_format": 1,
+      "source_zip": {
+        "url": "https://github.com/SandstoneDev/PS2RC/archive/refs/tags/v0.1.1.zip",
+        "size": 1564307,
+        "sha256": "182f67135865534f38ab416a67fd8db43beeea9f5b8e8413e5506888a6d7d6bc"
+      },
+      "assets": {
+        "converter-win64": {
+          "name": "PS2RC_Converter_0.1.1_win64.zip",
+          "url": "https://github.com/SandstoneDev/PS2RC/releases/download/v0.1.1/PS2RC_Converter_0.1.1_win64.zip",
+          "size": 103641078,
+          "sha256": "c0136338e99ddc1c72e4dea9f20b7fff97d33e48662cb5abd568321b292c48cc",
+          "toolchain": "PS2RC_Converter/toolchain",
+          "platform": "windows"
+        },
+        "converter-sources": {
+          "name": "PS2RC_Converter_0.1.1_sources.zip",
+          "url": "https://github.com/SandstoneDev/PS2RC/releases/download/v0.1.1/PS2RC_Converter_0.1.1_sources.zip",
+          "size": 249005731,
+          "sha256": "7ee930085af5d4ca61877aec12b3d64fdf07b6091dd27e6531f5aadabe2e6fc7",
+          "platform": "any"
+        }
+      }
+    }
+  }
+}
