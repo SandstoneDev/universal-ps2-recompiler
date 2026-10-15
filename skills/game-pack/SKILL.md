@@ -23,7 +23,8 @@ python3 ps2rc/pack.py get <SERIAL>_v<VERSION> id.serial    # how the build scrip
 `setup_ps2rc.py link` after each edit). `games/_template/pack.toml` documents every key; `games/example/` is a
 complete pack of a small test program to compare with; `PS2RC/docs/GAME_PACK_FORMAT.md` is the reference.
 
-**Reserved games.** A pack in PS2RC's `games/` with a `RESERVED.md` belongs to a game only SandstoneDev ports. You may
+**Listed discs.** A pack in PS2RC's `games/` with a `DISTRIBUTION.md` is for a disc whose work based on PS2RC only the
+PS2RC project distributes (licence 2(e); not a claim of any right in the game). You may
 read it to see how a real pack is organised (which tables a large game needed, how hooks and zones are laid out).
 Never copy its code, hook lists, addresses, lists or values into another pack, and never make or change a pack for that
 game. `setup_ps2rc.py check-pack <name>` fails on copied files or runs of copied lines; run it after every larger edit

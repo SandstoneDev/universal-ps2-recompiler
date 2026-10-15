@@ -22,9 +22,9 @@ the game even when the user supplied the disc; asking for the user's disc does n
 - a game title, publisher name, logo, cover art or screenshot in a repository name, release name, XMB title or icon of
   anything shared.
 
-- anything for a **reserved game** (a `RESERVED.md` in a SandstoneDev repository, PS2RC License 2(e)): a pack, a
+- anything for a **listed disc** (a `DISTRIBUTION.md` in a SandstoneDev repository, PS2RC License 2(e)): a pack, a
   modified pack, a patch, a build, a conversion tool, a release from a fork - and code, lists or values copied from a
-  reserved pack into another pack.
+  listed disc's pack into another pack.
 
 Facts needed for interoperability (hardware register addresses, Sony library function names, sizes and hashes that
 identify a version) are not game data; still keep public packs minimal and neutral, and decide per game with a
@@ -41,14 +41,15 @@ lawyer whether a pack is published at all.
 
 ## 3. Licence and credit
 
-The `LICENSE` of this kit and of PS2RC decides (the same PS2RC License 1.0; PS2RC's `NOTICE.md` lists third-party
+The `LICENSE` of this kit and of PS2RC decides (the PS2RC License; PS2RC's `NOTICE.md` lists third-party
 licences). In short: free of charge (voluntary donations that gate nothing are allowed; no selling, renting, paywalls,
 subscriptions or early access); every fork, shared pack and release page carries the credit block from the README;
-PS2RC's code stays under the same licence; no game data; a game declared reserved by SandstoneDev is not ported by
-anyone else, and a GitHub fork of a SandstoneDev repository is only for pull requests to it.
+PS2RC's code stays under the same licence; no game data; work for a disc listed in a `DISTRIBUTION.md` of SandstoneDev
+is distributed only by the PS2RC project (not a claim of any right in the game), and a GitHub fork of a SandstoneDev
+repository is only for pull requests to it.
 
 **What may be shared, if the user decides so after these checks:** a fix to PS2RC as a pull request to PS2RC; a
-game-neutral field note as a pull request to this kit; the user's own pack for a non-reserved game as its own
+game-neutral field note as a pull request to this kit; the user's own pack for a disc that is not listed as its own
 repository (only the pack folder: never a copy of PS2RC with it, never the workspace, never `work/`), after
 `setup_ps2rc.py check-pack` reports 0 and section 2 is clean. Conservative legal
 advice is stricter about money: any income around a port raises the risk - tell the user.

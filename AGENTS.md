@@ -64,14 +64,15 @@ machine: every location is asked from the user or discovered, and recorded in `P
    generated C, object files, EBOOTs, PRX or ELF built from a game, staged PSP folders, modules generated from the game
    (IOP, VU0), converted movies or textures, listings or databases of the game's code. Not to a fork, not to an issue,
    not to "one tester". Game-derived work lives in `<workspace>/work`, never in a repository.
-3. **Reserved games.** PS2RC's licence lets SandstoneDev reserve a game (a `RESERVED.md` in a SandstoneDev repository;
-   today one pack in PS2RC's `games/` carries one). Nobody else makes, modifies or publishes a pack, build or
-   conversion tool for a reserved game; a GitHub fork of PS2RC is only for pull requests to it. You may read a
-   reserved pack to learn the structure of a pack; never copy its code, lists, hooks or values into a new pack
-   (`setup_ps2rc.py check-pack` checks it).
+3. **Listed discs.** PS2RC's licence (section 2(e)) lets SandstoneDev list a disc in a `DISTRIBUTION.md` notice in a
+   SandstoneDev repository (today one pack in PS2RC's `games/` carries one); work based on PS2RC for a listed disc
+   is distributed only by the PS2RC project. This is not a claim of any right in any game. Nobody else makes,
+   modifies or publishes a pack, build or conversion tool for a listed disc; a GitHub fork of PS2RC is only for pull
+   requests to it. You may read a listed disc's pack to learn the structure of a pack; never copy its code, lists,
+   hooks or values into a new pack (`setup_ps2rc.py check-pack` checks it).
 4. **The user's packs stay local** unless the user decides otherwise after a legal check (`skills/legal-guard`).
    Labels and comments are neutral; no game title, publisher name, logo or cover art in anything public.
-5. **Licence and credit.** This kit and PS2RC are under the PS2RC License 1.0 (`LICENSE`; PS2RC's own `LICENSE` and
+5. **Licence and credit.** This kit and PS2RC are under the PS2RC License (`LICENSE`; PS2RC's own `LICENSE` and
    `NOTICE.md` for the engine). Everything distributed is free of charge; forks, packs and release pages carry the
    credit block from `README.md`. Push or publish only on the user's explicit request; never force-push without their
    explicit consent.

@@ -92,18 +92,19 @@ python skills/setup-ps2rc/setup_ps2rc.py new-pack <SERIAL> <VERSION> [--region P
 - Why outside the checkout: PS2RC finds packs only under its `games/` folder (`ps2rc/pack.py`, the source index in
   `ps2rc/config.py`, the converter's `ps2rc/convert/identify.py`), so the pack must appear there; keeping the real
   folder in `packs/` lets `update` replace the engine without touching the user's work, and lets the pack be its own
-  small git repository (`--git`) that never contains PS2RC or a reserved game's pack.
-- Refused: a serial that a `RESERVED.md` in PS2RC (or the lock's `reserved` list) names. The reserved game is ported
-  only by SandstoneDev; the user converts their own copy with PS2RC's own pack and converter.
+  small git repository (`--git`) that never contains PS2RC or a listed disc's pack.
+- Refused: a serial that a `DISTRIBUTION.md` in PS2RC (or the lock's `listed` list) names; PS2RC v0.1.1 and earlier
+  name that notice `RESERVED.md`, which is still detected. Work based on PS2RC for a listed disc is distributed only
+  by the PS2RC project; the user converts their own copy with PS2RC's own pack and converter.
 - Check a pack at any time, and always before anything is shared:
 
   ```
   python skills/setup-ps2rc/setup_ps2rc.py check-pack <SERIAL>_v<VERSION>
   ```
 
-  It fails on: the reserved serial, a file identical to one of a reserved pack, six or more lines in a row shared with
-  a reserved pack (beyond what `_template` and `example` also contain), disc or build file types, files over 512 KB.
-  You may **read** a reserved pack to see how a real pack is structured; never copy its code, lists, hooks or values
+  It fails on: a listed serial, a file identical to one of a listed disc's pack, six or more lines in a row shared
+  with such a pack (beyond what `_template` and `example` also contain), disc or build file types, files over 512 KB.
+  You may **read** a listed disc's pack to see how a real pack is structured; never copy its code, lists, hooks or values
   into another pack.
 
 ## 5. Status, verify, link, update

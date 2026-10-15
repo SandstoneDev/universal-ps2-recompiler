@@ -40,7 +40,7 @@ default of **stop** means: do not continue past this point without an answer.
 6. **Is there already a game pack for this game and version?** (PS2RC's `games/` after the setup, or a pack the user
    has from a source they trust)
    Why: with a pack the port is a conversion of minutes to hours; without one it is research of weeks to months. If
-   PS2RC already ships a pack for this exact disc (today: one reserved game), the user converts their copy with PS2RC
+   PS2RC already ships a pack for this exact disc (today: one listed disc), the user converts their copy with PS2RC
    itself (its converter release or `python -m ps2rc.convert`) - no new pack is made.
    Default: assume no pack.
 
@@ -51,10 +51,11 @@ default of **stop** means: do not continue past this point without an answer.
    made from the game (disc files, generated C, objects, EBOOTs, converted movies or textures, modules generated from
    the game, listings of its code) is ever published, uploaded, sent or committed - not to a fork, not to an issue,
    not to one friend. Game titles, logos and cover art stay out of public artefacts.
-   Also read: PS2RC's licence (PS2RC License 1.0, the same for this kit) is free of charge, asks forks and shared
-   packs to carry the credit block, and lets SandstoneDev reserve a game (a `RESERVED.md`): nobody else makes,
-   modifies or publishes a pack, build or conversion tool for a reserved game. A reserved pack may be read as an
-   example of structure, never copied.
+   Also read: PS2RC's licence (the PS2RC License, the same for this kit) is free of charge, asks forks and shared
+   packs to carry the credit block, and lets SandstoneDev list a disc (a `DISTRIBUTION.md`): work for a listed disc
+   is distributed only by the PS2RC project, so nobody else makes, modifies or publishes a pack, build or conversion
+   tool for it. This is not a claim of any right in any game. A listed disc's pack may be read as an example of
+   structure, never copied.
    Why: it is the only way this project works; `skills/legal-guard/SKILL.md` checks it before anything leaves the PC.
    This is not legal advice.
    Default: stop.

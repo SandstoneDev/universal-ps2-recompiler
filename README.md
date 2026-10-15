@@ -88,18 +88,20 @@ models: Unknown.
 ## Relationship to PS2RC and psp-developer
 
 - **[PS2RC](https://github.com/SandstoneDev/PS2RC)** is the engine (translator, runtime, HLE, converter, game pack
-  format) and the converter for the one game it supports. That game is **reserved** under the licence: only
-  SandstoneDev ports it, and forks of PS2RC are for pull requests only. This kit never makes, modifies or copies a
-  pack for a reserved game; it ports **other** games. Fixes to the engine go to PS2RC as pull requests.
+  format) and the converter for the one disc it supports. That disc is listed in PS2RC's `DISTRIBUTION.md` notice
+  (licence section 2(e)): work based on PS2RC for it is distributed only by the PS2RC project, and forks of PS2RC are
+  for pull requests only. This is not a claim of any right in any game. This kit never makes, modifies or copies a
+  pack for a listed disc; it ports **other** games. Fixes to the engine go to PS2RC as pull requests.
 - **[psp-developer](https://github.com/SandstoneDev/psp-developer)** is the companion skill for general PSP development
   (homebrew, rendering, Media Engine, real-hardware pitfalls).
 
 ## Licence and credit
 
-This kit is under the **PS2RC License 1.0** ([LICENSE](LICENSE), the same text as PS2RC's; here "PS2RC" covers the
+This kit is under the **PS2RC License 1.1** ([LICENSE](LICENSE), PS2RC's licence; PS2RC v0.1.1 and earlier carry
+version 1.0, which has the same effect; here "PS2RC" covers the
 kit's instructions, skills, notes, scripts and tests too). In short: free of charge (voluntary donations that gate
 nothing are fine), forks and anything you publish carry the credit block below, the code stays under the same
-licence, no game data ever, no work for a reserved game. Third-party notes: [NOTICE.md](NOTICE.md).
+licence, no game data ever, no work for a listed disc. Third-party notes: [NOTICE.md](NOTICE.md).
 
 ```
 Based on PS2RC by SandstoneDev

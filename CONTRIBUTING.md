@@ -18,7 +18,7 @@ Changes to the engine (translator, runtime, HLE, converter, pack format) belong 
   confidential documentation or console-maker SDKs, no citations of them.
 - **No game data and no code recovered from a game**: no files, tables, listings, generated C or builds, not even one
   function as an example. Knowledge notes are game-neutral (`skills/field-notes/SKILL.md`).
-- **Nothing for a reserved game** (PS2RC License 2(e)): no pack, patch or instructions for it beyond what PS2RC
+- **Nothing for a listed disc** (PS2RC License 2(e)): no pack, patch or instructions for it beyond what PS2RC
   itself documents.
 - **Nothing machine-specific**: no paths of your machine, drive letters, user or host names, tool locations, e-mail
   addresses, tokens. `tests/test_portability.py` checks the tree; every location is asked from the user or discovered

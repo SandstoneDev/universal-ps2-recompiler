@@ -4,8 +4,8 @@
   "repo": "SandstoneDev/PS2RC",
   "url": "https://github.com/SandstoneDev/PS2RC",
   "default": "v0.1.1",
-  "reserved": [
-    {"serial": "SLES-52541", "version": "2.01", "pack": "games/SLES-52541_v2.01", "notice": "games/SLES-52541_v2.01/RESERVED.md"}
+  "listed": [
+    {"serial": "SLES-52541", "version": "2.01", "pack": "games/SLES-52541_v2.01"}
   ],
   "releases": {
     "v0.1.1": {

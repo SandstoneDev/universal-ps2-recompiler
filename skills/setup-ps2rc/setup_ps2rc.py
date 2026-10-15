@@ -561,13 +561,27 @@ def checkout_changes(ws, m):
     return out
 
 
-def reserved_serials(lock, checkout=None):
-    out = set(r["serial"] for r in lock.get("reserved", []))
+# The pack notice that lists a disc under PS2RC License 2(e) ("Listed Disc"): DISTRIBUTION.md. Backward compatibility:
+# PS2RC v0.1.0 / v0.1.1 (licence 1.0) name the same notice RESERVED.md, so a checkout of those releases is still detected.
+LISTING_NOTICES = ("DISTRIBUTION.md", "RESERVED.md")
+
+
+def _listing_notice(pack_dir):
+    for n in LISTING_NOTICES:
+        p = os.path.join(pack_dir, n)
+        if os.path.isfile(p):
+            return p
+    return None
+
+
+def listed_serials(lock, checkout=None):
+    # lock key "listed"; "reserved" = its name in kit locks before PS2RC License 1.1 (backward compatibility)
+    out = set(r["serial"] for r in lock.get("listed", []) + lock.get("reserved", []))
     games = os.path.join(checkout, "games") if checkout else None
     if games and os.path.isdir(games):
         for name in os.listdir(games):
-            rp = os.path.join(games, name, "RESERVED.md")
-            if os.path.isfile(rp):
+            rp = _listing_notice(os.path.join(games, name))
+            if rp:
                 with open(rp, encoding="utf-8", errors="replace") as f:
                     for line in f:
                         if line.lstrip().startswith("|"):
@@ -575,11 +589,11 @@ def reserved_serials(lock, checkout=None):
     return out
 
 
-def reserved_pack_dirs(checkout):
+def listed_pack_dirs(checkout):
     games = os.path.join(checkout, "games")
     out = []
     for name in sorted(os.listdir(games)) if os.path.isdir(games) else []:
-        if os.path.isfile(os.path.join(games, name, "RESERVED.md")) and not is_link(os.path.join(games, name)):
+        if _listing_notice(os.path.join(games, name)) and not is_link(os.path.join(games, name)):
             out.append(os.path.join(games, name))
     return out
 
@@ -866,10 +880,10 @@ def cmd_new_pack(a, lock):
         raise SetupError("version %r: expected the SYSTEM.CNF VER value, e.g. 1.00" % version)
     if a.region and a.region not in REGIONS:
         raise SetupError("region %r: one of %s" % (a.region, ", ".join(REGIONS)))
-    if serial in reserved_serials(lock, checkout):
-        raise SetupError("%s is a Reserved Game under the PS2RC License (section 2(e), its RESERVED.md): only "
-                         "SandstoneDev ports it. Use PS2RC's own pack and converter for your copy; do not make, "
-                         "modify or publish a pack for it." % serial, 3)
+    if serial in listed_serials(lock, checkout):
+        raise SetupError("%s is a Listed Disc under the PS2RC License (section 2(e), its pack's DISTRIBUTION.md): "
+                         "work based on PS2RC for it is distributed only by the PS2RC project. Use PS2RC's own pack "
+                         "and converter for your copy; do not make, modify or publish a pack for it." % serial, 3)
     name = "%s_v%s" % (serial, version)
     if any(p["name"] == name for p in m["packs"]):
         raise SetupError("pack %s already exists in packs/" % name)
@@ -981,10 +995,10 @@ def _windows(lines, n):
 
 
 def check_pack(pack_dir, checkout, lock, window=6):
-    """Findings for a user's pack: reserved serial, files or runs of lines shared with a reserved pack, disc-like
+    """Findings for a user's pack: a listed serial, files or runs of lines shared with a listed disc's pack, disc-like
     files. [] = clean."""
     finds = []
-    serials = reserved_serials(lock, checkout)
+    serials = listed_serials(lock, checkout)
     common = set()
     for d in ("_template", "example"):
         base = os.path.join(checkout, "games", d)
@@ -993,7 +1007,7 @@ def check_pack(pack_dir, checkout, lock, window=6):
                 if fn.endswith(TEXT_EXT):
                     common |= _windows(_norm_lines(os.path.join(dp, fn)), window)
     res_files, res_windows = {}, {}
-    for rd in reserved_pack_dirs(checkout):
+    for rd in listed_pack_dirs(checkout):
         for dp, _dn, fns in os.walk(rd):
             for fn in fns:
                 p = os.path.join(dp, fn)
@@ -1013,7 +1027,7 @@ def check_pack(pack_dir, checkout, lock, window=6):
                 finds.append("%s: larger than 512 KB - a pack holds descriptions, not data" % rel)
             h = sha256_file(p)
             if h in res_files:
-                finds.append("%s: identical to the reserved pack's %s - never copy it" % (rel, res_files[h]))
+                finds.append("%s: identical to the listed disc's pack file %s - never copy it" % (rel, res_files[h]))
                 continue
             if fn.endswith(TEXT_EXT):
                 lines = _norm_lines(p)
@@ -1023,14 +1037,14 @@ def check_pack(pack_dir, checkout, lock, window=6):
                     if w in res_windows:
                         hits.add(res_windows[w])
                 if hits:
-                    finds.append("%s: %d+ lines in a row shared with %s - write your own (reading the reserved pack "
+                    finds.append("%s: %d+ lines in a row shared with %s - write your own (reading the listed disc's pack "
                                  "as an example of structure is fine, copying it is not)" % (rel, window,
                                                                                             ", ".join(sorted(hits))))
                 with open(p, encoding="utf-8", errors="replace") as f:
                     txt = f.read()
                 for s in serials:
                     if s in txt:
-                        finds.append("%s: names the reserved serial %s" % (rel, s))
+                        finds.append("%s: names the listed disc serial %s" % (rel, s))
     return finds
 
 
@@ -1102,7 +1116,7 @@ def build_parser():
     common(lk)
     lk.add_argument("--copy", action="store_true", help="copy packs instead of linking them")
     sub.add_parser("doctor", help="what this machine has and lacks, and where to get it (doctor.py)")
-    c = sub.add_parser("check-pack", help="check a pack: reserved game, copied code, disc files")
+    c = sub.add_parser("check-pack", help="check a pack: listed disc, copied code, disc files")
     common(c)
     c.add_argument("name")
     return ap
