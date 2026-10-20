@@ -24,7 +24,9 @@ machine: every location is asked from the user or discovered, and recorded in `P
 ## Start here
 
 1. **Onboarding questionnaire first**: `docs/AGENT_ONBOARDING.md`. Do not install, download, build, read a disc image
-   or touch a memory stick before it is answered.
+   or touch a memory stick before it is answered. Then **research the user's game in public sources** (its section K:
+   existing ports, recompilations and source-reconstruction projects, wikis, known addresses and symbols, earlier PSP ports, licences;
+   never game data, BIOS, firmware, SDKs or keys).
 2. **Machine check**: `python -m uprkit doctor` (or `python skills/setup-ps2rc/setup_ps2rc.py doctor`): what is present,
    what is missing, and the official source of each missing item (`docs/DEPENDENCIES.md`). Installs nothing.
 3. **Workspace and engine**: `skills/setup-ps2rc/SKILL.md` - ask where the workspace goes, download PS2RC at the pinned
@@ -64,12 +66,9 @@ machine: every location is asked from the user or discovered, and recorded in `P
    generated C, object files, EBOOTs, PRX or ELF built from a game, staged PSP folders, modules generated from the game
    (IOP, VU0), converted movies or textures, listings or databases of the game's code. Not to a fork, not to an issue,
    not to "one tester". Game-derived work lives in `<workspace>/work`, never in a repository.
-3. **Listed discs.** PS2RC's licence (section 2(e)) lets SandstoneDev list a disc in a `DISTRIBUTION.md` notice in a
-   SandstoneDev repository (today one pack in PS2RC's `games/` carries one); work based on PS2RC for a listed disc
-   is distributed only by the PS2RC project. This is not a claim of any right in any game. Nobody else makes,
-   modifies or publishes a pack, build or conversion tool for a listed disc; a GitHub fork of PS2RC is only for pull
-   requests to it. You may read a listed disc's pack to learn the structure of a pack; never copy its code, lists,
-   hooks or values into a new pack (`setup_ps2rc.py check-pack` checks it).
+3. **Discs PS2RC already supports.** If PS2RC's `games/` already has a pack for the user's exact disc, the user
+   converts their copy with PS2RC's converter; improvements to that pack go to PS2RC as pull requests or into the
+   user's fork. Code from PS2RC's packs may be reused under the PS2RC License (with its credit block).
 4. **The user's packs stay local** unless the user decides otherwise after a legal check (`skills/legal-guard`).
    Labels and comments are neutral; no game title, publisher name, logo or cover art in anything public.
 5. **Licence and credit.** This kit and PS2RC are under the PS2RC License (`LICENSE`; PS2RC's own `LICENSE` and
@@ -89,8 +88,8 @@ machine: every location is asked from the user or discovered, and recorded in `P
 
 ## The workflow (summary of `skills/ps2rc-port/SKILL.md`)
 
-0. Questionnaire -> `PORT_STATE.md` in `<workspace>/work`; doctor; workspace and PS2RC (`skills/setup-ps2rc`); with
-   consent, public reference documents (`skills/fetch-docs`).
+0. Questionnaire -> `PORT_STATE.md` in `<workspace>/work`; public research on the game (onboarding section K); doctor;
+   workspace and PS2RC (`skills/setup-ps2rc`); with consent, public reference documents (`skills/fetch-docs`).
 1. Environment: PS2RC's `python -m ps2rc doctor`; build and run `games/example` on the host.
 2. Identify the disc (serial, version, region, boot program hash) from the user's `SYSTEM.CNF`.
 3. Recon: overlays, IOP modules, VU programs, Sony library names, engine category -> honest estimate -> user decides.

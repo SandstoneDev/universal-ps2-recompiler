@@ -23,11 +23,10 @@ python3 ps2rc/pack.py get <SERIAL>_v<VERSION> id.serial    # how the build scrip
 `setup_ps2rc.py link` after each edit). `games/_template/pack.toml` documents every key; `games/example/` is a
 complete pack of a small test program to compare with; `PS2RC/docs/GAME_PACK_FORMAT.md` is the reference.
 
-**Listed discs.** A pack in PS2RC's `games/` with a `DISTRIBUTION.md` is for a disc whose work based on PS2RC only the
-PS2RC project distributes (licence 2(e); not a claim of any right in the game). You may
-read it to see how a real pack is organised (which tables a large game needed, how hooks and zones are laid out).
-Never copy its code, hook lists, addresses, lists or values into another pack, and never make or change a pack for that
-game. `setup_ps2rc.py check-pack <name>` fails on copied files or runs of copied lines; run it after every larger edit
+**PS2RC's own packs.** The packs in PS2RC's `games/` show how a real pack is organised (which tables a large game
+needed, how hooks and zones are laid out). Their code is under the PS2RC License like the rest of PS2RC: reuse is
+fine with the credit block; addresses, hooks and values belong to their disc and rarely fit another game.
+`setup_ps2rc.py check-pack <name>` fails on disc or build files and oversized files; run it after every larger edit
 and before anything is shared. Path values: `{work}/x` (work directory), `{disc}/x` (the user's
 extracted disc), `{repo}/x` (checkout), plain = inside the pack.
 

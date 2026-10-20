@@ -88,26 +88,42 @@ models: Unknown.
 ## Relationship to PS2RC and psp-developer
 
 - **[PS2RC](https://github.com/SandstoneDev/PS2RC)** is the engine (translator, runtime, HLE, converter, game pack
-  format) and the converter for the one disc it supports. That disc is listed in PS2RC's `DISTRIBUTION.md` notice
-  (licence section 2(e)): work based on PS2RC for it is distributed only by the PS2RC project, and forks of PS2RC are
-  for pull requests only. This is not a claim of any right in any game. This kit never makes, modifies or copies a
-  pack for a listed disc; it ports **other** games. Fixes to the engine go to PS2RC as pull requests.
+  format) and the converter for the disc it already supports; for that disc the user simply converts their copy with
+  PS2RC. This kit ports **other** games. Fixes to the engine go to PS2RC as pull requests.
 - **[psp-developer](https://github.com/SandstoneDev/psp-developer)** is the companion skill for general PSP development
   (homebrew, rendering, Media Engine, real-hardware pitfalls).
 
 ## Licence and credit
 
-This kit is under the **PS2RC License 1.1** ([LICENSE](LICENSE), PS2RC's licence; PS2RC v0.1.1 and earlier carry
-version 1.0, which has the same effect; here "PS2RC" covers the
-kit's instructions, skills, notes, scripts and tests too). In short: free of charge (voluntary donations that gate
-nothing are fine), forks and anything you publish carry the credit block below, the code stays under the same
-licence, no game data ever, no work for a listed disc. Third-party notes: [NOTICE.md](NOTICE.md).
+This kit is under the **PS2RC License 1.2** ([LICENSE](LICENSE), PS2RC's licence; each PS2RC release carries the
+version in its own `LICENSE`; here "PS2RC" covers the kit's instructions, skills, notes, scripts and tests too). In
+short: free of charge (voluntary donations that gate nothing are fine), forks and anything you publish carry the
+credit block below, the code stays under the same licence, no game data ever. Third-party notes:
+[NOTICE.md](NOTICE.md).
 
 ```
 Based on PS2RC by SandstoneDev
 https://github.com/SandstoneDev/PS2RC
 Community: https://discord.gg/wV8x46ZTDu
 ```
+
+## Credits
+
+Written by SandstoneDev. Thanks to:
+
+- **DenielX** ([github.com/DenielX](https://github.com/DenielX/), YouTube
+  [@sp-pteam-indev6976](https://www.youtube.com/@sp-pteam-indev6976)) - for advice during development.
+- **mcidclan** ([github.com/mcidclan](https://github.com/mcidclan)) - PSP Media Engine research: the runtime's Media
+  Engine start-up follows the boot pattern of his
+  [me-feed-graphics-engine](https://github.com/mcidclan/me-feed-graphics-engine) (MIT), and his Media Engine samples
+  (memory map, spinlock, soft interrupts, DMA) and clock research shaped the Media Engine and overclock work.
+- **ps2-recomp-Agent-SKILL** (MIT) and [universal-modder](https://github.com/rehan-remade/universal-modder): ideas
+  and the repository pattern of this kit ([NOTICE.md](NOTICE.md));
+- the projects the reference documents and design notes come from: [pspdev](https://github.com/pspdev),
+  [ps2sdk](https://github.com/ps2dev/ps2sdk), [PCSX2](https://pcsx2.net/), [PPSSPP](https://www.ppsspp.org/),
+  [PS2Recomp](https://github.com/ran-j/PS2Recomp), [N64Recomp](https://github.com/N64Recomp/N64Recomp),
+  [ps2tek](https://psi-rockin.github.io/ps2tek/), [uOFW](https://github.com/uofw/uofw) (full list with licences:
+  `skills/fetch-docs/SKILL.md`).
 
 ## Community
 

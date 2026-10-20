@@ -561,41 +561,13 @@ def checkout_changes(ws, m):
     return out
 
 
-# The pack notice that lists a disc under PS2RC License 2(e) ("Listed Disc"): DISTRIBUTION.md. Backward compatibility:
-# PS2RC v0.1.0 / v0.1.1 (licence 1.0) name the same notice RESERVED.md, so a checkout of those releases is still detected.
-LISTING_NOTICES = ("DISTRIBUTION.md", "RESERVED.md")
-
-
-def _listing_notice(pack_dir):
-    for n in LISTING_NOTICES:
-        p = os.path.join(pack_dir, n)
-        if os.path.isfile(p):
-            return p
-    return None
-
-
-def listed_serials(lock, checkout=None):
-    # lock key "listed"; "reserved" = its name in kit locks before PS2RC License 1.1 (backward compatibility)
-    out = set(r["serial"] for r in lock.get("listed", []) + lock.get("reserved", []))
-    games = os.path.join(checkout, "games") if checkout else None
-    if games and os.path.isdir(games):
-        for name in os.listdir(games):
-            rp = _listing_notice(os.path.join(games, name))
-            if rp:
-                with open(rp, encoding="utf-8", errors="replace") as f:
-                    for line in f:
-                        if line.lstrip().startswith("|"):
-                            out.update(re.findall(r"\b[A-Z]{4}-\d{5}\b", line))
-    return out
-
-
-def listed_pack_dirs(checkout):
+def shipped_packs_for(checkout, serial):
+    """PS2RC's own packs for this disc serial (games/<SERIAL>_v<VER>), e.g. ['games/SLUS-12345_v1.00']."""
     games = os.path.join(checkout, "games")
-    out = []
-    for name in sorted(os.listdir(games)) if os.path.isdir(games) else []:
-        if _listing_notice(os.path.join(games, name)) and not is_link(os.path.join(games, name)):
-            out.append(os.path.join(games, name))
-    return out
+    if not os.path.isdir(games):
+        return []
+    return ["games/" + n for n in sorted(os.listdir(games))
+            if n.upper().startswith(serial + "_V") and not is_link(os.path.join(games, n))]
 
 
 # ---------------------------------------------------------------- commands
@@ -880,15 +852,16 @@ def cmd_new_pack(a, lock):
         raise SetupError("version %r: expected the SYSTEM.CNF VER value, e.g. 1.00" % version)
     if a.region and a.region not in REGIONS:
         raise SetupError("region %r: one of %s" % (a.region, ", ".join(REGIONS)))
-    if serial in listed_serials(lock, checkout):
-        raise SetupError("%s is a Listed Disc under the PS2RC License (section 2(e), its pack's DISTRIBUTION.md): "
-                         "work based on PS2RC for it is distributed only by the PS2RC project. Use PS2RC's own pack "
-                         "and converter for your copy; do not make, modify or publish a pack for it." % serial, 3)
+    shipped = shipped_packs_for(checkout, serial)
+    if shipped:
+        say("note: PS2RC already ships a pack for %s (%s): the user can convert their copy with PS2RC's converter, "
+            "or start from that pack" % (serial, ", ".join(shipped)))
     name = "%s_v%s" % (serial, version)
     if any(p["name"] == name for p in m["packs"]):
         raise SetupError("pack %s already exists in packs/" % name)
     if os.path.exists(os.path.join(checkout, "games", name)):
-        raise SetupError("PS2RC already ships a pack named %s (games/%s): use it" % (name, name))
+        raise SetupError("PS2RC already ships a pack named %s (games/%s): convert with it, or change it in a "
+                         "fork of PS2RC" % (name, name))
     tpl = os.path.join(checkout, "games", "_template")
     if not os.path.isfile(os.path.join(tpl, "pack.toml")):
         raise SetupError("PS2RC/games/_template is missing: run verify / update")
@@ -975,46 +948,13 @@ __pycache__/
 """
 
 
-TEXT_EXT = (".c", ".h", ".S", ".s", ".py", ".toml", ".def", ".txt", ".tsv", ".md", ".ld", ".json", ".sh", ".inc")
 SUSPECT_EXT = (".iso", ".cso", ".elf", ".irx", ".pss", ".pbp", ".prx", ".bin", ".img", ".at3", ".vag", ".pmf", ".o",
                ".a")
 
 
-def _norm_lines(p):
-    with open(p, encoding="utf-8", errors="replace") as f:
-        out = []
-        for ln in f:
-            s = " ".join(ln.split())
-            if len(s) >= 8 and not re.match(r"^(#|//|/\*|\*|--)", s):
-                out.append(s)
-        return out
-
-
-def _windows(lines, n):
-    return set(hashlib.sha1("\n".join(lines[i:i + n]).encode()).hexdigest() for i in range(len(lines) - n + 1))
-
-
-def check_pack(pack_dir, checkout, lock, window=6):
-    """Findings for a user's pack: a listed serial, files or runs of lines shared with a listed disc's pack, disc-like
-    files. [] = clean."""
+def check_pack(pack_dir, checkout=None, lock=None):
+    """Findings for a user's pack: disc or build file types and oversized files. [] = clean."""
     finds = []
-    serials = listed_serials(lock, checkout)
-    common = set()
-    for d in ("_template", "example"):
-        base = os.path.join(checkout, "games", d)
-        for dp, _dn, fns in os.walk(base):
-            for fn in fns:
-                if fn.endswith(TEXT_EXT):
-                    common |= _windows(_norm_lines(os.path.join(dp, fn)), window)
-    res_files, res_windows = {}, {}
-    for rd in listed_pack_dirs(checkout):
-        for dp, _dn, fns in os.walk(rd):
-            for fn in fns:
-                p = os.path.join(dp, fn)
-                res_files[sha256_file(p)] = os.path.relpath(p, checkout).replace(os.sep, "/")
-                if fn.endswith(TEXT_EXT):
-                    for w in _windows(_norm_lines(p), window) - common:
-                        res_windows.setdefault(w, os.path.relpath(p, checkout).replace(os.sep, "/"))
     for dp, dns, fns in os.walk(pack_dir):
         dns[:] = [d for d in dns if d not in (".git",) + GENERATED]
         for fn in fns:
@@ -1025,26 +965,6 @@ def check_pack(pack_dir, checkout, lock, window=6):
                 finds.append("%s: a disc or build file type - never in a pack" % rel)
             if os.path.getsize(p) > 512 * 1024:
                 finds.append("%s: larger than 512 KB - a pack holds descriptions, not data" % rel)
-            h = sha256_file(p)
-            if h in res_files:
-                finds.append("%s: identical to the listed disc's pack file %s - never copy it" % (rel, res_files[h]))
-                continue
-            if fn.endswith(TEXT_EXT):
-                lines = _norm_lines(p)
-                hits = set()
-                for i in range(len(lines) - window + 1):
-                    w = hashlib.sha1("\n".join(lines[i:i + window]).encode()).hexdigest()
-                    if w in res_windows:
-                        hits.add(res_windows[w])
-                if hits:
-                    finds.append("%s: %d+ lines in a row shared with %s - write your own (reading the listed disc's pack "
-                                 "as an example of structure is fine, copying it is not)" % (rel, window,
-                                                                                            ", ".join(sorted(hits))))
-                with open(p, encoding="utf-8", errors="replace") as f:
-                    txt = f.read()
-                for s in serials:
-                    if s in txt:
-                        finds.append("%s: names the listed disc serial %s" % (rel, s))
     return finds
 
 
@@ -1116,7 +1036,7 @@ def build_parser():
     common(lk)
     lk.add_argument("--copy", action="store_true", help="copy packs instead of linking them")
     sub.add_parser("doctor", help="what this machine has and lacks, and where to get it (doctor.py)")
-    c = sub.add_parser("check-pack", help="check a pack: listed disc, copied code, disc files")
+    c = sub.add_parser("check-pack", help="check a pack: no disc or build files, no data")
     common(c)
     c.add_argument("name")
     return ap

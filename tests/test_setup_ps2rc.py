@@ -30,8 +30,7 @@ doctor = load("doctor")
 HAVE_GIT = shutil.which("git") is not None
 FAKE_COMMIT = "1" * 40
 FAKE_URL = "https://" + "example.invalid"          # (in pieces: the release audit flags unknown hosts)
-LISTED = "TEST-00001"           # a listed disc: its pack carries DISTRIBUTION.md (PS2RC License 1.1)
-LEGACY = "TEST-00002"           # backward compatibility: PS2RC v0.1.0 / v0.1.1 name that notice RESERVED.md
+SHIPPED = "TEST-00001"          # a disc PS2RC already ships a pack for
 
 TEMPLATE_TOML = """# pack.toml - template
 format = 1
@@ -48,8 +47,7 @@ system_cnf_boot2 = 'cdrom0:\\SLUS_000.00;1'
 elf_size = 0
 """
 
-LISTED_C = "\n".join("int listed_function_number_%02d(void) { return %d * 7; }" % (i, i) for i in range(30)) + "\n"
-LEGACY_C = "\n".join("int legacy_function_number_%02d(void) { return %d * 9; }" % (i, i) for i in range(30)) + "\n"
+SHIPPED_C = "\n".join("int shipped_function_number_%02d(void) { return %d * 7; }" % (i, i) for i in range(30)) + "\n"
 
 
 def engine_files(version="9.9.9"):
@@ -63,14 +61,8 @@ def engine_files(version="9.9.9"):
         "games/_template/hooks.def": "# hooks\n",
         "games/_template/src/pack_main.c": "/* the pack's side of the HLE interface */\nint pack_init(void) { return 0; }\n",
         "games/example/pack.toml": TEMPLATE_TOML.replace("SLUS-00000", "EXAM-00001"),
-        "games/%s_v1.00/DISTRIBUTION.md" % LISTED: "# Distribution notice\n\n| Disc serial | Version |\n|---|---|\n"
-                                                   "| %s | 1.00 |\n" % LISTED,
-        "games/%s_v1.00/src/world.c" % LISTED: LISTED_C,
-        "games/%s_v1.00/pack.toml" % LISTED: TEMPLATE_TOML.replace("SLUS-00000", LISTED),
-        # the notice's name in PS2RC v0.1.0 / v0.1.1 (backward compatibility of the detection)
-        "games/%s_v1.00/RESERVED.md" % LEGACY: "# notice\n\n| Disc serial | Version |\n|---|---|\n| %s | 1.00 |\n" % LEGACY,
-        "games/%s_v1.00/src/world.c" % LEGACY: LEGACY_C,
-        "games/%s_v1.00/pack.toml" % LEGACY: TEMPLATE_TOML.replace("SLUS-00000", LEGACY),
+        "games/%s_v1.00/src/world.c" % SHIPPED: SHIPPED_C,
+        "games/%s_v1.00/pack.toml" % SHIPPED: TEMPLATE_TOML.replace("SLUS-00000", SHIPPED),
     }
 
 
@@ -85,7 +77,7 @@ def make_zip(path, files, top, comment=FAKE_COMMIT, compress=zipfile.ZIP_DEFLATE
 
 def lock_for(tmp, releases, default):
     lock = {"format": 1, "repo": "test/PS2RC", "url": FAKE_URL + "/PS2RC", "default": default,
-            "listed": [{"serial": LISTED}], "releases": releases}
+            "releases": releases}
     p = os.path.join(str(tmp), "lock.json")
     with open(p, "w", encoding="utf-8") as f:
         json.dump(lock, f)
@@ -221,7 +213,7 @@ def test_setup_by_git_clone_and_zip_agree(tmp_path, monkeypatch):
     assert run(lock, "verify", "--workspace", ws) == 0
 
 
-def test_new_pack_link_and_listed(env):
+def test_new_pack_link_and_shipped(env, capsys):
     assert run(env["lock"], "setup", "--workspace", env["ws"], "--zip", env["zip"]) == 0
     assert run(env["lock"], "new-pack", "SLUS-12345", "1.00", "--region", "NTSC-U", "--workspace", env["ws"]) == 0
     pack = os.path.join(env["ws"], "packs", "SLUS-12345_v1.00")
@@ -232,36 +224,33 @@ def test_new_pack_link_and_listed(env):
     assert "cdrom0:\\SLUS_123.45;1" in text
     readme = open(os.path.join(pack, "README.md"), encoding="utf-8").read()
     assert "Based on PS2RC by SandstoneDev" in readme
-    assert run(env["lock"], "new-pack", LISTED, "1.00", "--workspace", env["ws"]) == 3
-    assert run(env["lock"], "new-pack", LEGACY, "1.00", "--workspace", env["ws"]) == 3     # found by its old notice
+    # a disc PS2RC already has a pack for: the same name is refused (it would hide PS2RC's pack); another version
+    # gets a note and is made
+    assert run(env["lock"], "new-pack", SHIPPED, "1.00", "--workspace", env["ws"]) == 1
+    capsys.readouterr()
+    assert run(env["lock"], "new-pack", SHIPPED, "1.01", "--workspace", env["ws"]) == 0
+    assert "already ships a pack for %s" % SHIPPED in capsys.readouterr().out
     assert run(env["lock"], "new-pack", "bad", "1.00", "--workspace", env["ws"]) == 1
     assert run(env["lock"], "check-pack", "SLUS-12345_v1.00", "--workspace", env["ws"]) == 0
     m = manifest(env["ws"])
     assert m["packs"][0]["link"] in ("junction", "symlink", "copy")
 
 
-def test_check_pack_finds_copied_code(env, capsys):
+def test_check_pack_finds_disc_files(env, capsys):
     assert run(env["lock"], "setup", "--workspace", env["ws"], "--zip", env["zip"]) == 0
     assert run(env["lock"], "new-pack", "SLUS-12345", "1.00", "--workspace", env["ws"]) == 0
     src = os.path.join(env["ws"], "packs", "SLUS-12345_v1.00", "src")
-    with open(os.path.join(src, "copied.c"), "w", encoding="utf-8") as f:
-        f.write("/* mine */\n" + "\n".join(LISTED_C.splitlines()[3:12]) + "\n")
-    shutil.copy(os.path.join(env["ws"], "PS2RC", "games", "%s_v1.00" % LISTED, "src", "world.c"),
+    # code from PS2RC's own packs may be reused (same licence); disc and build files never belong in a pack
+    shutil.copy(os.path.join(env["ws"], "PS2RC", "games", "%s_v1.00" % SHIPPED, "src", "world.c"),
                 os.path.join(src, "world.c"))
-    with open(os.path.join(src, "old.c"), "w", encoding="utf-8") as f:
-        f.write("/* mine */\n" + "\n".join(LEGACY_C.splitlines()[3:12]) + "\n")
+    assert run(env["lock"], "check-pack", "SLUS-12345_v1.00", "--workspace", env["ws"]) == 0
     with open(os.path.join(src, "disc.iso"), "wb") as f:
         f.write(b"\0" * 16)
+    with open(os.path.join(src, "big.txt"), "w", encoding="utf-8") as f:
+        f.write("x" * (600 * 1024))
     assert run(env["lock"], "check-pack", "SLUS-12345_v1.00", "--workspace", env["ws"]) == 1
     out = capsys.readouterr().out
-    assert "copied.c" in out and "identical" in out and "disc.iso" in out
-    assert "old.c" in out and "%s_v1.00" % LEGACY in out
-
-
-def test_listed_serials_old_lock_key():
-    # kit locks before PS2RC License 1.1 named the list "reserved" (backward compatibility)
-    assert sp.listed_serials({"reserved": [{"serial": "TEST-00003"}]}) == {"TEST-00003"}
-    assert sp.listed_serials({"listed": [{"serial": "TEST-00004"}]}) == {"TEST-00004"}
+    assert "disc.iso" in out and "big.txt" in out and "world.c" not in out
 
 
 def test_update_keeps_packs_and_refuses_local_edits(env, capsys):
@@ -320,7 +309,6 @@ def test_real_lock_is_consistent():
     assert rel["source_zip"]["url"].startswith(lock["url"])
     for a in rel["assets"].values():
         assert a["url"].startswith(lock["url"] + "/releases/download/" + lock["default"] + "/") and len(a["sha256"]) == 64
-    assert lock["listed"]
 
 
 @pytest.mark.skipif(not os.environ.get("UPR_PS2RC_FIXTURE") or not HAVE_GIT,
@@ -339,8 +327,6 @@ def test_real_release_against_local_clone(tmp_path, monkeypatch):
     assert manifest(ws)["ps2rc"]["tree_sha256"] == rel["tree_sha256"]
     assert sp.main(["new-pack", "SLUS-12345", "1.00", "--workspace", ws]) == 0
     assert sp.main(["check-pack", "SLUS-12345_v1.00", "--workspace", ws]) == 0
-    for r in lock["listed"]:
-        assert sp.main(["new-pack", r["serial"], r["version"], "--workspace", ws]) == 3
 
 
 def test_doctor_runs_offline(tmp_path, capsys):

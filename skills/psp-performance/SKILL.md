@@ -6,6 +6,10 @@ description: "Make a recompiled PS2 game fit and run faster on the PSP with PS2R
 # Speed and memory on the PSP
 
 Measure on the user's PSP only (psp-build-test section 5). Profile before you optimise; one lever per A/B set.
+**Performance numbers (fps, frame time, CPU or GE milliseconds, free memory) are trusted only from the real console.**
+PPSSPP, PCSX2 and the PC host build answer correctness questions (boots, renders, this log line appears) - booleans
+and hints, never a speed or memory figure; do not report their numbers as performance and do not choose a lever by
+them.
 
 ## 1. Know where the frame goes
 

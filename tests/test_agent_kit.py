@@ -63,4 +63,4 @@ def test_readme_carries_credit_and_licence():
               "not affiliated", "No game data"):
         assert s in readme, s
     lic = open(os.path.join(ROOT, "LICENSE"), encoding="utf-8").read()
-    assert lic.startswith("PS2RC License, version 1.1")
+    assert lic.startswith("PS2RC License, version 1.2")

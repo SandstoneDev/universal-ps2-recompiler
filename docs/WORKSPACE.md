@@ -10,7 +10,7 @@ engine: on the user's machine `skills/setup-ps2rc/setup_ps2rc.py` downloads PS2R
   WORKSPACE.txt                 the same layout in two lines per folder, for the user
   PS2RC/                        the engine checkout at the pinned release
     games/_template, example    from PS2RC
-    games/<listed disc's pack>  from PS2RC: read-only example of structure, never copied
+    games/<SERIAL>_v<VER>       PS2RC's own packs (read-only here; change them in a fork of PS2RC)
     games/<SERIAL>_v<VER>  -->  link to packs/<SERIAL>_v<VER> (junction on Windows, symlink elsewhere, else a copy)
     local.toml                  copy of ../local.toml
   packs/<SERIAL>_v<VER>/        the user's own pack (from PS2RC's games/_template), optionally its own git repository
@@ -30,8 +30,7 @@ engine: on the user's machine `skills/setup-ps2rc/setup_ps2rc.py` downloads PS2R
 - The checkout is replaceable: `update` puts a new verified release in place and links the packs again. A pack inside
   the checkout would have to survive that replacement; in `packs/` it is never touched.
 - The pack is the user's own work: it can be its own small git repository that contains neither PS2RC nor any other
-  game's pack (in particular not a listed disc's pack), which is exactly what may be shared later, if the user decides so
-  after a legal check.
+  game's pack, which is exactly what may be shared later, if the user decides so after a legal check.
 - Links are excluded from the checkout's git status (`.git/info/exclude`), so the engine checkout stays clean and
   `verify` reports only real changes to the engine.
 
@@ -42,8 +41,7 @@ that `PS2RC/games/<name>/pack.toml` is readable; if it is not, use `--copy`.
 ## Versions and updates
 
 - `ps2rc.lock.json` pins each PS2RC release this kit was checked with: tag, commit, content hash of the source tree,
-  SHA-256 of the source archive and of the release assets, the listed disc serials, the pack format. `default` is the
-  release `setup` installs.
+  SHA-256 of the source archive and of the release assets, the pack format. `default` is the release `setup` installs.
 - `update` installs the kit's default (or `--tag`), verified the same way; the old checkout is kept as
   `PS2RC.backup-<tag>-<time>` until the user deletes it. It refuses when the checkout has local edits (engine fixes go
   to PS2RC as pull requests) unless `--accept-backup`.

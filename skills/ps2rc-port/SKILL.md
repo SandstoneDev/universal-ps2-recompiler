@@ -24,8 +24,8 @@ After the questionnaire:
 3. offer the public reference documents (`skills/fetch-docs/SKILL.md`): it asks where to save them and which sets,
    shows the sizes, and records everything in an index. Neither the kit nor PS2RC ships manuals.
 
-If PS2RC already supports the user's exact disc (a pack in its `games/`, for example a listed disc), there is no port
-to do: the user converts their own copy with PS2RC's converter. Never make or modify a pack for a listed disc.
+If PS2RC already supports the user's exact disc (a pack in its `games/`), there is no port to do: the user converts
+their own copy with PS2RC's converter (improvements to that pack go to PS2RC as pull requests).
 
 Stop and explain if the answers show any of these: the user does not own the disc or got the image from someone else;
 the user wants to share the result (builds, EBOOTs, converted files) with others; the PSP is a 32 MB model
@@ -64,7 +64,8 @@ reached, what is next and how long it may take.
 
 | # | Phase | Skill | Entry | Exit |
 |---|---|---|---|---|
-| 1 | Environment | setup-ps2rc, psp-build-test | questionnaire done | workspace made, PS2RC verified (`setup_ps2rc.py verify`); `python -m ps2rc doctor` in `PS2RC/` shows what the chosen goal needs; the example pack builds and runs on the host (`games/example`) |
+| 0 | Public research | ps2-recon (section 0) | questionnaire done | what is publicly known about the game (ports, recompilations, source-reconstruction projects, wikis, addresses, earlier PSP ports, licences) recorded with sources in `PORT_STATE.md`, summary given to the user (onboarding section K) |
+| 1 | Environment | setup-ps2rc, psp-build-test | questionnaire done, phase 0 done or declined | workspace made, PS2RC verified (`setup_ps2rc.py verify`); `python -m ps2rc doctor` in `PS2RC/` shows what the chosen goal needs; the example pack builds and runs on the host (`games/example`) |
 | 2 | Identify the disc | ps2-recon | the user gave the image path and confirmed ownership | serial, version, region and boot program read from the user's `SYSTEM.CNF`; boot program size and SHA-256 recorded |
 | 3 | Recon | ps2-recon | phase 2 | overlays, IOP modules, VU programs, library functions and the engine category listed; an honest estimate given to the user (checkpoint: continue or stop) |
 | 4 | Game pack | setup-ps2rc, game-pack | phase 3 | `setup_ps2rc.py new-pack <SERIAL> <VERSION>` made `packs/<SERIAL>_v<VERSION>` (seen by PS2RC as `games/<SERIAL>_v<VERSION>`), filled with `[id]`, `[verify]`, `[memory]`, Sony library hooks; `check-pack` clean |
@@ -95,8 +96,6 @@ the log.
 
 - downloading a game image, a PS2 BIOS, PSP firmware, keys or custom firmware, or telling the user where to get them;
 - working from a disc image the user does not own or got from someone else;
-- making, modifying or copying a pack, build or conversion tool for a listed disc (a `DISTRIBUTION.md` in PS2RC), or
-  copying code, lists or values from a listed disc's pack into another pack;
 - breaking encryption, DRM or ownership checks;
 - sharing, uploading or committing anything made from the game: disc files, generated C, objects, EBOOTs, the pack's
   game-derived modules, converted movies or textures - also "just for one tester";

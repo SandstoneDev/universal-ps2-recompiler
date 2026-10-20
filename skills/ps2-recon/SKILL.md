@@ -8,6 +8,16 @@ description: "Identify and survey a PS2 game from the user's own disc image befo
 Everything here reads the user's own disc image on the user's machine. Outputs go to the work directory, never into
 the repository. Never ask the user to send you files, and never fetch a disc, BIOS or file from anywhere.
 
+## 0. Public research first
+
+Before reading the disc, look up what is already public about the game: existing ports, static recompilations,
+source-reconstruction projects of the game or its engine, earlier PSP versions or ports, wikis and
+modding pages (engine, file formats, known addresses, symbol or map files, cheat-code address lists), emulator
+compatibility notes, and the licence of each. The procedure and the rules are in `docs/AGENT_ONBOARDING.md` section K:
+public sources only, respect licences (read to understand, never copy code; facts in your own words with the source in
+`PORT_STATE.md`), and never download or point to game images, extracted game files, BIOS, firmware, SDKs or keys.
+A known address or structure from such a source is a hypothesis until the user's own disc confirms it.
+
 ## 1. Identify (read, do not guess)
 
 1. Open the image or the extracted folder. The converter's reader works on both and prints the identity:

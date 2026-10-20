@@ -1,12 +1,12 @@
 # Notices
 
-universal-ps2-recompiler is under the PS2RC License 1.0 (`LICENSE`). It contains no third-party code and no game data.
+universal-ps2-recompiler is under the PS2RC License (`LICENSE`). It contains no third-party code and no game data.
 
 ## PS2RC (downloaded, not included)
 
 The engine, PS2RC (https://github.com/SandstoneDev/PS2RC), is downloaded onto the user's machine by
 `skills/setup-ps2rc/setup_ps2rc.py`; it is not part of this repository. It comes with its own `LICENSE` (the same
-PS2RC License 1.0) and `NOTICE.md` (the third-party code inside it, and the licences of its converter release:
+PS2RC License) and `NOTICE.md` (the third-party code inside it, and the licences of its converter release:
 the PSP toolchain, ffmpeg, Qt, atracdenc). Read them in the downloaded checkout.
 
 ## Tools and documents named here
