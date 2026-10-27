@@ -3,8 +3,34 @@
   "about": "PS2RC releases this kit was checked against. setup_ps2rc.py installs only these unless --allow-unpinned is given. tree_sha256 = SHA-256 of the lines '<sha256 of the file>  <path>' (sorted by path) of every file in the release's source archive.",
   "repo": "SandstoneDev/PS2RC",
   "url": "https://github.com/SandstoneDev/PS2RC",
-  "default": "v0.2.0",
+  "default": "v0.2.1",
   "releases": {
+    "v0.2.1": {
+      "commit": "8cd56bb6feee32f963d6e430ff0eda85565d1005",
+      "tree_sha256": "c3c2642447742a032da7668f06e783b54605bc4d6612a3961a3c7baf8ccda785",
+      "files": 466,
+      "pack_format": 1,
+      "source_zip": {
+        "url": "https://github.com/SandstoneDev/PS2RC/archive/refs/tags/v0.2.1.zip"
+      },
+      "assets": {
+        "converter-win64": {
+          "name": "PS2RC_Converter_0.2.1_win64.zip",
+          "url": "https://github.com/SandstoneDev/PS2RC/releases/download/v0.2.1/PS2RC_Converter_0.2.1_win64.zip",
+          "size": 124742607,
+          "sha256": "d3862664a8d9dc0d1124476feb4a5eed0ae602245b2debe12fba7a206b98b5e6",
+          "toolchain": "PS2RC_Converter/toolchain",
+          "platform": "windows"
+        },
+        "converter-sources": {
+          "name": "PS2RC_Converter_0.2.1_sources.zip",
+          "url": "https://github.com/SandstoneDev/PS2RC/releases/download/v0.2.1/PS2RC_Converter_0.2.1_sources.zip",
+          "size": 244210493,
+          "sha256": "7f4c72e0f5bd9eee991c793b85ca739aa4166b10d2afb977e111b27b450d7b72",
+          "platform": "any"
+        }
+      }
+    },
     "v0.2.0": {
       "commit": "f9bce2bfce452c4327a361f417535c6dc1ff84c7",
       "tree_sha256": "4e572731ccfd39ea57dc97f0d334898a788edb06009496851038d52c2c0ac5e1",

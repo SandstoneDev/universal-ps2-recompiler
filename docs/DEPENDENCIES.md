@@ -21,8 +21,8 @@ release page shows at download time.
 
 | Item | Need | Official source | Checked version, file, SHA-256 |
 |---|---|---|---|
-| PS2RC (the engine) | required | https://github.com/SandstoneDev/PS2RC/releases | pinned in `skills/setup-ps2rc/ps2rc.lock.json`: v0.2.0 (default; v0.1.1 still pinned), commit f9bce2bfce452c4327a361f417535c6dc1ff84c7, content hash there; installed by `setup_ps2rc.py setup` |
-| PS2RC converter with the Windows PSP toolchain and ffmpeg | Windows, optional | same release page | `PS2RC_Converter_0.2.0_win64.zip`, 124,732,175 bytes, sha256 cbb11644e91d4eb4309b26eeb9588cf44e16f9b9e07f92faf18b81ea8bdfb823 (`setup --with-converter`) |
+| PS2RC (the engine) | required | https://github.com/SandstoneDev/PS2RC/releases | pinned in `skills/setup-ps2rc/ps2rc.lock.json`: v0.2.1 (default; v0.2.0 and v0.1.1 still pinned), commit 8cd56bb6feee32f963d6e430ff0eda85565d1005, content hash there; installed by `setup_ps2rc.py setup` |
+| PS2RC converter with the Windows PSP toolchain and ffmpeg | Windows, optional | same release page | `PS2RC_Converter_0.2.1_win64.zip`, 124,742,607 bytes, sha256 d3862664a8d9dc0d1124476feb4a5eed0ae602245b2debe12fba7a206b98b5e6 (`setup --with-converter`) |
 | Python 3.11 or newer | required | https://www.python.org/downloads/ | any current 3.13 or 3.14 release; each release page lists the files' SHA-256 and Sigstore signatures. Windows: the 64-bit installer, tick "Add python.exe to PATH". Linux: the distribution's python3 |
 | pyelftools, pytest | required | https://pypi.org/project/pyelftools/ , https://pypi.org/project/pytest/ | `python -m pip install --user pyelftools pytest` |
 | git | recommended | https://git-scm.com/downloads | Windows: https://github.com/git-for-windows/git/releases/latest, release v2.56.0.windows.2, 64-bit .exe installer, 66,763,664 bytes, sha256 52188f917b378f00c70ec136bcf090005f30d44fbc4eba0bce759cc6592d60f6. Without git the setup uses the release's source zip |
